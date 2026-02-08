@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapping Heterodoxy</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Alegreya+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #1a1611;
+    --parchment-light: #2a2219;
+    --parchment-mid: #352c21;
+    --gold: #c9a84c;
+    --gold-dim: #8a7235;
+    --gold-bright: #e8c95a;
+    --cream: #d4c5a0;
+    --cream-dim: #9a8e72;
+    --red: #a83232;
+    --red-bright: #d44040;
+    --text: #c8bda0;
+    --text-dim: #7a7060;
+    --border: #3d3428;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--parchment);
+    color: var(--text);
+    font-family: 'EB Garamond', 'Georgia', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 3rem 2rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  header::after {
+    content: '✦';
+    display: block;
+    color: var(--gold-dim);
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    letter-spacing: 1em;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--cream);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  /* Main layout */
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    min-height: calc(100vh - 200px);
+  }
+
+  @media (max-width: 900px) {
+    main {
+      grid-template-columns: 1fr;
+      padding: 1.25rem;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    main {
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    header {
+      padding: 2rem 1rem 1.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+    }
+  }
+
+  /* Sidebar */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding-right: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding-right: 0;
+      padding-bottom: 2rem;
+    }
+  }
+
+  .sidebar h2 {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+
+  /* Heresy list */
+  .heresy-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .heresy-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 44px;
+  }
+
+  .heresy-item:hover {
+    background: var(--parchment-light);
+  }
+
+  .heresy-item.active {
+    background: var(--parchment-mid);
+  }
+
+  .heresy-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    border-radius: 2px;
+  }
+
+  .heresy-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(255,255,255,0.1);
+  }
+
+  .heresy-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    transition: color 0.2s;
+  }
+
+  .heresy-item.active .heresy-name {
+    color: var(--cream);
+  }
+
+  /* tooltip popup for node click */
+  .node-tooltip {
+    position: fixed;
+    z-index: 10000;
+    background: var(--parchment-light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    max-width: 380px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease;
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    .node-tooltip {
+      max-width: calc(100vw - 2rem);
+      left: 1rem !important;
+      right: 1rem;
+      width: auto;
+    }
+  }
+
+  .node-tooltip.visible {
+    display: block;
+  }
+
+  .node-tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .node-tooltip-axis {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .node-tooltip-score {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .node-tooltip-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-dim);
+  }
+
+  .node-tooltip-text em {
+    color: var(--cream-dim);
+  }
+
+  .node-tooltip-close {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.7rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.25rem 0.35rem;
+    border-radius: 3px;
+    transition: all 0.15s;
+  }
+
+  .node-tooltip-close:hover {
+    color: var(--cream);
+    background: rgba(255,255,255,0.06);
+  }
+
+  /* Compare controls */
+  .controls {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .controls label {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn:hover {
+    border-color: var(--gold-dim);
+    color: var(--cream);
+  }
+
+  .btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(201, 168, 76, 0.08);
+  }
+
+  /* Chart area */
+  .chart-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .chart-container {
+    width: 100%;
+    max-width: 740px;
+    aspect-ratio: 1;
+    position: relative;
+  }
+
+  /* Detail panel */
+  .detail-panel {
+    width: 100%;
+    max-width: 740px;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: var(--parchment-light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: none;
+  }
+
+  .detail-panel.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--cream);
+  }
+
+  .detail-avg {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 600px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .detail-axis {
+    padding: 0.6rem 0;
+  }
+
+  .detail-axis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.35rem;
+  }
+
+  .detail-axis-name {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+  }
+
+  .detail-axis-score {
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cream);
+  }
+
+  .detail-bar-track {
+    width: 100%;
+    height: 4px;
+    background: var(--parchment);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .detail-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .detail-reasoning {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-dim);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .detail-reasoning.expanded {
+    max-height: 2000px;
+  }
+
+  .detail-reasoning p {
+    margin-bottom: 0.5rem;
+  }
+
+  .detail-reasoning strong {
+    color: var(--cream-dim);
+  }
+
+  .toggle-reasoning {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+  }
+
+  .toggle-reasoning:hover {
+    color: var(--gold);
+  }
+
+  .toggle-arrow {
+    display: inline-block;
+    transition: transform 0.3s;
+  }
+
+  .toggle-arrow.open {
+    transform: rotate(90deg);
+  }
+
+  /* Composite ranking bar */
+  .ranking-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .ranking-section h2 {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+
+  .ranking-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+  }
+
+  .ranking-bar-item:hover .ranking-label {
+    color: var(--cream);
+  }
+
+  .ranking-label {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.85rem;
+    color: var(--cream-dim);
+    width: 130px;
+    flex-shrink: 0;
+    text-align: right;
+    transition: color 0.2s;
+  }
+
+  @media (max-width: 600px) {
+    .ranking-label {
+      width: 90px;
+      font-size: 0.75rem;
+    }
+
+    .ranking-bar-item {
+      gap: 0.5rem;
+    }
+  }
+
+  .ranking-track {
+    flex: 1;
+    height: 6px;
+    background: var(--parchment-mid);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .ranking-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ranking-value {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    width: 35px;
+    text-align: right;
+  }
+
+  /* Methodology footer */
+  footer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer h2 {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+
+  footer p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+    max-width: 800px;
+    margin-bottom: 0.75rem;
+  }
+
+  footer em {
+    color: var(--cream-dim);
+    font-style: italic;
+  }
+
+  .scale-legend {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--parchment-light);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    footer {
+      padding: 1.5rem 1rem;
+    }
+
+    .scale-legend {
+      gap: 0.75rem 1.25rem;
+      padding: 0.75rem;
+    }
+  }
+
+  .scale-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .scale-num {
+    font-family: 'EB Garamond', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--gold);
+    width: 1.2rem;
+    text-align: center;
+  }
+
+  /* Weight sliders */
+  .weight-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .weight-label {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--cream-dim);
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .weight-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--parchment-mid);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  .weight-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: 2px solid var(--parchment);
+  }
+
+  .weight-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: 2px solid var(--parchment);
+  }
+
+  .weight-value {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--gold);
+    width: 24px;
+    text-align: right;
+  }
+
+  .scale-desc {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Mapping Heterodoxy</h1>
+  <div class="subtitle">A Multidimensional Analysis of Ten Early Christian Heresies</div>
+</header>
+
+<main>
+  <aside class="sidebar">
+    <h2>Heresies</h2>
+    <ul class="heresy-list" id="heresyList"></ul>
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-top:0.75rem;">
+      <p style="font-family:'Alegreya Sans',sans-serif;font-size:0.68rem;color:var(--text-dim);line-height:1.5;letter-spacing:0.02em;font-style:italic;margin:0;flex:1;">Select multiple heresies to overlay them on the radar chart.</p>
+      <button class="btn" onclick="clearHeresySelection()" style="flex-shrink:0;">Clear</button>
+    </div>
+
+    <div class="controls">
+      <label>Compare</label>
+      <div class="btn-row" id="compareBtnRow">
+        <button class="btn" data-key="all" onclick="compareAll()">All</button>
+        <button class="btn" data-key="trin" onclick="compareByAxis('trin')">Trinitarian</button>
+        <button class="btn" data-key="chris" onclick="compareByAxis('chris')">Christological</button>
+        <button class="btn" data-key="soter" onclick="compareByAxis('soter')">Soteriological</button>
+        <button class="btn" data-key="cosmo" onclick="compareByAxis('cosmo')">Cosmological</button>
+        <button class="btn" data-key="eccl" onclick="compareByAxis('eccl')">Ecclesiological</button>
+        <button class="btn" data-key="script" onclick="compareByAxis('script')">Scriptural</button>
+        <button class="btn" data-key="clear" onclick="clearCompare()">Clear</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <label>Axis Weighting</label>
+      <div class="btn-row" id="weightBtnRow">
+        <button class="btn active" data-wkey="equal" onclick="setWeightPreset('equal')">Equal</button>
+        <button class="btn" data-wkey="conciliar" onclick="setWeightPreset('conciliar')">Conciliar</button>
+        <button class="btn" data-wkey="custom" onclick="setWeightPreset('custom')">Custom</button>
+      </div>
+      <div id="customWeights" style="display:none;margin-top:0.75rem;"></div>
+    </div>
+
+    <div class="ranking-section">
+      <h2>Composite Heterodoxy</h2>
+      <div id="rankingBars"></div>
+    </div>
+  </aside>
+
+  <section class="chart-area">
+    <div class="chart-container" id="chartContainer">
+      <canvas id="radarChart"></canvas>
+    </div>
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-header">
+        <span class="detail-title" id="detailTitle"></span>
+        <span class="detail-avg" id="detailAvg"></span>
+      </div>
+      <div class="detail-grid" id="detailGrid"></div>
+      <button class="toggle-reasoning" id="toggleBtn" onclick="toggleReasoning()">
+        <span class="toggle-arrow" id="toggleArrow">▸</span> Score Reasoning
+      </button>
+      <div class="detail-reasoning" id="detailReasoning"></div>
+    </div>
+  </section>
+</main>
+
+<!-- Node click tooltip -->
+<div class="node-tooltip" id="nodeTooltip">
+  <button class="node-tooltip-close" onclick="closeNodeTooltip()">✕</button>
+  <div class="node-tooltip-header">
+    <span class="node-tooltip-axis" id="tooltipAxis"></span>
+    <span class="node-tooltip-score" id="tooltipScore"></span>
+  </div>
+  <div class="node-tooltip-text" id="tooltipText"></div>
+</div>
+
+<footer>
+  <h2>Methodology</h2>
+  <p>
+    Each heresy is scored on six axes measuring how far it departs from the orthodox consensus defined by the early ecumenical councils, on a scale from 0 (orthodox) to 10 (anathema).
+  </p>
+  <p>
+    The six axes were chosen not from a systematic theology textbook but from the actual battles the early Church fought. <em>Trinitarian Theology</em> and <em>Christology</em> reflect the questions that dominated the first four ecumenical councils. <em>Soteriology</em> captures the grace-and-nature debates crystallized in the Pelagian controversy. <em>Cosmology &amp; Creation</em> addresses the dualist challenge posed by Gnostics and Manichaeans. <em>Ecclesiology &amp; Sacraments</em> reflects disputes over the Church's authority and the validity of its rites. <em>Scriptural &amp; Apostolic Continuity</em> tracks whether a movement preserved, edited, or replaced the received scriptures and apostolic tradition. Other candidates—eschatology, ethics, pneumatology—were considered and set aside because they were either rarely anathematized in this period or collapse into one of the existing axes.
+  </p>
+  <p>
+    Scores are grounded in primary sources (conciliar documents, patristic polemics, surviving heretical texts) and cross-referenced with secondary scholarship. The key distinction between adjacent scores is one of <em>degree and consequence</em>: a 6 means a heresy clearly contradicts a defined teaching but preserves the surrounding framework, while an 8 means the rejection is severe enough to destabilize other doctrines. A 2 reflects terminological imprecision that the councils later clarified, while a 4 indicates a real distortion that falls short of outright contradiction. The composite score can be calculated under three weighting modes, selectable in the sidebar. <em>Equal</em> weights all six axes at 1×, treating every doctrinal domain as equally significant. <em>Conciliar</em> weights Trinitarian Theology and Christology at 2× and Soteriology at 1.5×, reflecting the priority the ecumenical councils themselves gave to these questions (the first four councils addressed Trinitarian and Christological disputes; soteriology was settled at regional councils with ecumenical authority). <em>Custom</em> lets the user assign their own weights from 0.5× to 3× per axis, so they can test how different assumptions about doctrinal priority reshape the overall ranking.
+  </p>
+  <div class="scale-legend">
+    <div class="scale-item"><span class="scale-num">0</span><span class="scale-desc">Fully orthodox</span></div>
+    <div class="scale-item"><span class="scale-num">2</span><span class="scale-desc">Pre-conciliar imprecision</span></div>
+    <div class="scale-item"><span class="scale-num">4</span><span class="scale-desc">Materially problematic</span></div>
+    <div class="scale-item"><span class="scale-num">6</span><span class="scale-desc">Contradicts defined dogma</span></div>
+    <div class="scale-item"><span class="scale-num">8</span><span class="scale-desc">Fundamental rejection</span></div>
+    <div class="scale-item"><span class="scale-num">10</span><span class="scale-desc">Anathema</span></div>
+  </div>
+</footer>
+
+<script>
+const AXES = [
+  'Trinitarian\nTheology',
+  'Christology',
+  'Soteriology',
+  'Cosmology &\nCreation',
+  'Ecclesiology &\nSacraments',
+  'Scriptural &\nApostolic Continuity'
+];
+
+const HERESIES = [
+  {
+    name: 'Marcionism',
+    // Old: [4.5, 4.0, 3.5, 5.0, 3.0, 5.0] → avg 4.17
+    scores: [9, 8, 7, 10, 6, 10],
+    color: '#c94040',
+    reasoning: {
+      'Trinitarian\nTheology': 'Marcion posits two entirely separate Gods—the wrathful Creator of the OT and an alien God of love revealed by Christ. Tertullian\'s <em>Against Marcion</em> I.3 devotes its opening to refuting the "two gods" thesis. Not a full 10 because Marcion does not construct an elaborate polytheistic system.',
+      'Christology': 'Marcion held a docetic Christology: Christ appeared without birth or genuine flesh. Tertullian (<em>AM</em> III.8–11) confirms the denial of real incarnation. Slightly below full docetism because Marcion affirmed Christ\'s genuine suffering in appearance.',
+      'Soteriology': 'Salvation is rescue from the Creator-God\'s domain by an alien God with no prior relation to creation. The bond between creation and redemption is severed. The error is in the framework of salvation rather than its mechanism.',
+      'Cosmology &\nCreation': 'The defining feature. The material world is the product of an inferior Creator-God, wholly separate from the Father of Jesus Christ. A complete inversion of <em>creatio ex nihilo</em> by a good God. Tertullian devotes two books to refuting this.',
+      'Ecclesiology &\nSacraments': 'Marcion established a parallel church with clergy, sacraments, and liturgy, reinterpreted within his two-God framework. The Marcionite church survived for centuries.',
+      'Scriptural &\nApostolic Continuity': 'Marcion rejected the entire OT, radically edited Luke and Paul\'s epistles. This forced the orthodox church to formalize its own canon. A full break with scriptural continuity.'
+    }
+  },
+  {
+    name: 'Monarchianism',
+    // Old: [5.0, 3.0, 1.5, 0.5, 1.0, 1.0] → avg 2.00
+    scores: [10, 6, 3, 1, 2, 2],
+    color: '#d4a040',
+    reasoning: {
+      'Trinitarian\nTheology': 'Father, Son, and Spirit are modes of one divine monad, not distinct persons. Directly and completely contradicts Nicene-Constantinopolitan hypostatic distinction. The patripassian implication—the Father suffered on the cross—was considered particularly objectionable.',
+      'Christology': 'Collapses the Son into the Father, eliminating the distinct personal existence of the incarnate Logos. However, it affirms the full divinity of the one incarnate—indeed, too much divinity. The humanity of Christ is not directly denied.',
+      'Soteriology': 'Does not directly challenge soteriology. The modalist can still affirm that God saves. The problem is indirect: if there is no distinct Son, the mediatorial role becomes difficult to sustain.',
+      'Cosmology &\nCreation': 'Monarchians affirm creation <em>ex nihilo</em> by the one God. No dualism or emanation. Essentially orthodox cosmology.',
+      'Ecclesiology &\nSacraments': 'Did not generate a counter-church. Modalism was popular among Roman clergy, operating within existing ecclesial structures.',
+      'Scriptural &\nApostolic Continuity': 'Monarchians appealed to the same scriptures as the orthodox. Their error was in interpretation, not in canon or succession.'
+    }
+  },
+  {
+    name: 'Manichaeism',
+    // Old: [4.0, 4.5, 4.0, 5.0, 4.5, 5.0] → avg 4.50
+    scores: [8, 9, 8, 10, 9, 10],
+    color: '#8040c9',
+    reasoning: {
+      'Trinitarian\nTheology': 'Replaces the Trinity with a dualist cosmology of Light and Darkness. Mani incorporated Jesus as a cosmic figure (Jesus the Splendor), but significantly recontextualized. Not 10 because Manichaeism replaces rather than directly denies the Trinity.',
+      'Christology': 'Mani\'s Christ is a cosmic emanation of Light, not the incarnate Logos. The Manichaean Jesus did not truly take flesh, suffer, or die. Augustine (<em>AFE</em> chs. 6–8) attacks this directly.',
+      'Soteriology': 'Salvation is liberation of Light particles trapped in matter through gnosis and asceticism—not redemption from sin through grace. The mechanism, agent, and goal are all fundamentally different.',
+      'Cosmology &\nCreation': 'Full metaphysical dualism: two coeternal principles in perpetual conflict. The material world results from a cosmic mixing of Light and Darkness. The furthest departure from <em>creatio ex nihilo</em>. Augustine devotes chapters 25–37 of <em>AFE</em> to refuting this.',
+      'Ecclesiology &\nSacraments': 'A completely separate religion with its own hierarchy (Elect and Hearers), scriptures, and liturgy. Mani established churches throughout the Roman and Sasanian Empires.',
+      'Scriptural &\nApostolic Continuity': 'Mani composed his own scriptures and claimed a new revelation through his divine twin. Positioned himself as the Paraclete—not an interpreter but a superseding revelator. A complete departure from apostolic tradition.'
+    }
+  },
+  {
+    name: 'Pelagianism',
+    // Old: [0, 0.5, 5.0, 0, 2.0, 0.5] → avg 1.33
+    scores: [0, 1, 10, 0, 4, 1],
+    color: '#40a868',
+    reasoning: {
+      'Trinitarian\nTheology': 'Pelagius affirmed the full Nicene faith. His errors were anthropological and soteriological, not trinitarian.',
+      'Christology': 'No direct Christological denial. However, Augustine (<em>ONG</em> ch. 47) notes Pelagianism reduces Christ to a moral exemplar, indirectly diminishing the reason for the Incarnation.',
+      'Soteriology': 'The defining error. Denied original sin, affirmed human capacity to avoid sin without grace. Augustine\'s <em>On Nature and Grace</em> devotes 84 chapters to refuting this. Formally condemned at Carthage (418) and Orange (529).',
+      'Cosmology &\nCreation': 'Affirmed orthodox creation doctrine. His high view of created goodness was the problem—he refused to acknowledge the Fall had damaged it.',
+      'Ecclesiology &\nSacraments': 'Undermines the logic of infant baptism and diminishes sacramental necessity. However, Pelagius did not reject Church authority or establish a counter-church.',
+      'Scriptural &\nApostolic Continuity': 'Worked within canonical scriptures and claimed apostolic warrant. The error was exegetical—misreading Paul—not canon rejection.'
+    }
+  },
+  {
+    name: 'Nestorianism',
+    // Old: [0.5, 4.0, 2.5, 0, 1.5, 0.5] → avg 1.50
+    scores: [1, 8, 5, 0, 3, 1],
+    color: '#4080c9',
+    reasoning: {
+      'Trinitarian\nTheology': 'Nestorius\'s error is Christological, not Trinitarian. He affirmed the full Nicene faith regarding the Trinity.',
+      'Christology': 'Resisted <em>Theotokos</em> and spoke of two <em>prosopa</em> in ways that appeared to divide Christ into two subjects. Cyril and Chalcedon directly target this. Modern scholarship suggests Nestorius\'s actual position was more nuanced. Scored 8 rather than 9 for this reason.',
+      'Soteriology': 'If Christ\'s natures are not truly united, the soteriological exchange is compromised. Gregory Nazianzen\'s principle is not violated (both natures affirmed) but the unity of the saving act is at risk.',
+      'Cosmology &\nCreation': 'No cosmological deviation.',
+      'Ecclesiology &\nSacraments': 'Generated a major schism (Church of the East), but this was as much political as theological. Sacramental practice was preserved.',
+      'Scriptural &\nApostolic Continuity': 'Worked entirely within the canonical and apostolic framework. Error was in theological interpretation.'
+    }
+  },
+  {
+    name: 'Monophysitism',
+    // Old: [0.5, 3.5, 2.5, 0, 2.0, 0.5] → avg 1.50
+    scores: [1, 7, 5, 0, 4, 1],
+    color: '#4dc9c0',
+    reasoning: {
+      'Trinitarian\nTheology': 'A Christological rather than Trinitarian error. The Trinity is affirmed.',
+      'Christology': 'Eutyches taught Christ had only one nature after the union—humanity absorbed into divinity. Directly contradicts Chalcedon\'s "in two natures." Scored 7 because the miaphysite position is arguably not what Chalcedon condemned—the target was Eutyches specifically.',
+      'Soteriology': 'If human nature is absorbed, humanity is not truly assumed and therefore not truly healed. Leo\'s <em>Tome</em> emphasizes that each nature performs its proper operations for salvation.',
+      'Cosmology &\nCreation': 'No cosmological deviation.',
+      'Ecclesiology &\nSacraments': 'Generated lasting schisms (Oriental Orthodox churches). The Monophysites claimed continuity with apostolic tradition. Sacramental practice was preserved.',
+      'Scriptural &\nApostolic Continuity': 'Worked within the canonical framework, claiming Cyril and Athanasius as authorities.'
+    }
+  },
+  {
+    name: 'Arianism',
+    // Old: [5.0, 4.0, 4.5, 0.5, 2.0, 1.0] → avg 2.83
+    scores: [10, 8, 9, 1, 4, 2],
+    color: '#c96040',
+    reasoning: {
+      'Trinitarian\nTheology': 'The Son is a creature—"there was a time when he was not." Formally condemned at Nicaea with explicit anathemas. Arius denied <em>homoousios</em>, co-eternity, and substantial unity with the Father. The paradigmatic Trinitarian heresy.',
+      'Christology': 'If the Logos is a creature, the Incarnation is not God becoming human but a supreme creature taking flesh. However, Arius affirmed the reality of the Incarnation—the humanity is not denied, the divinity is.',
+      'Soteriology': 'Athanasius\'s core argument: only God can save. If Christ is a creature, salvation is impossible. Arius affirmed Christ as savior but made the claim difficult to sustain.',
+      'Cosmology &\nCreation': 'Affirms creation <em>ex nihilo</em> by the one God. The Logos is the agent of creation but is himself created. The error is in the agent\'s status, not the cosmological framework.',
+      'Ecclesiology &\nSacraments': 'Deeply divided the Church with imperial backing, but Arians competed for control of the same institution rather than rejecting its structure.',
+      'Scriptural &\nApostolic Continuity': 'Worked within canonical scriptures, claiming biblical warrant (especially Prov. 8:22). Arius saw himself as defending received tradition.'
+    }
+  },
+  {
+    name: 'Montanism',
+    // Old: [1.5, 0.5, 1.5, 0, 3.5, 3.0] → avg 1.67
+    scores: [3, 1, 3, 0, 7, 6],
+    color: '#a8a040',
+    reasoning: {
+      'Trinitarian\nTheology': 'The Paraclete question is ambiguous. Montanus\'s oracles could suggest modalism, but likely reflect ecstatic speech rather than considered theology. Tertullian, the most sophisticated Montanist, actually advanced Trinitarian theology.',
+      'Christology': 'No distinctively Montanist Christological deviation. Tertullian\'s Christology is robustly orthodox.',
+      'Soteriology': 'Montanist rigorism distorts the economy of grace by denying the Church\'s power to reconcile penitent sinners. A real deviation but within a broadly orthodox framework.',
+      'Cosmology &\nCreation': 'No cosmological deviation. Eschatological intensity is not a cosmological error.',
+      'Ecclesiology &\nSacraments': 'The most significant axis. Claimed ongoing prophetic revelation superior to episcopal authority, established parallel leadership, demanded rebaptism, denied forgiveness for serious sins.',
+      'Scriptural &\nApostolic Continuity': 'Did not reject canonical scriptures but claimed supplementary, binding revelation through the Paraclete. A different kind of break from Marcion\'s—not subtraction but unauthorized addition.'
+    }
+  },
+  {
+    name: 'Apollinarianism',
+    // Old: [0.5, 4.5, 4.0, 0, 1.0, 0.5] → avg 1.75
+    scores: [1, 9, 8, 0, 2, 1],
+    color: '#c940a8',
+    reasoning: {
+      'Trinitarian\nTheology': 'Apollinarius affirmed Nicene Trinitarianism and was a vigorous anti-Arian defender of <em>homoousios</em>.',
+      'Christology': 'Denied Christ possessed a human rational soul, replacing it with the divine Logos. Directly contradicts Chalcedon\'s "complete in his humanity." Condemned at Constantinople I (381). Scored 9: he affirmed real flesh, so the humanity was truncated rather than denied outright.',
+      'Soteriology': 'Gregory Nazianzen\'s axiom: "what is not assumed is not healed." The human mind needs redemption; if Christ did not assume it, it remains unhealed. A serious soteriological consequence even though Apollinarius intended to protect Christ\'s saving divinity.',
+      'Cosmology &\nCreation': 'No cosmological deviation.',
+      'Ecclesiology &\nSacraments': 'Generated a brief schism, quickly suppressed after 381. Did not produce a lasting counter-church.',
+      'Scriptural &\nApostolic Continuity': 'Worked within canonical and apostolic framework. Error was in metaphysical reasoning about the Incarnation.'
+    }
+  },
+  {
+    name: 'Docetism',
+    // Old: [1.5, 5.0, 5.0, 3.0, 2.5, 2.0] → avg 3.17
+    scores: [3, 10, 10, 6, 5, 4],
+    color: '#6080d0',
+    reasoning: {
+      'Trinitarian\nTheology': 'Primarily Christological. By denying the Incarnation\'s reality, it compromises the Second Person\'s true entry into creation. The motivation was typically to protect divine transcendence.',
+      'Christology': 'The furthest Christological deviation. Christ did not truly become human, was not born, did not suffer, did not die. Contradicts every Creedal clause from "was incarnate" through "was buried."',
+      'Soteriology': 'If the Incarnation is illusory, the entire soteriological economy collapses. Athanasius (<em>De Incarnatione</em> 44): death was "within the body," so Life had to be woven into it. A phantasmal Christ cannot defeat real death.',
+      'Cosmology &\nCreation': 'Presupposes a negative view of matter making divine contact impossible. Not full dualism (unlike Manichaeism), but implies material creation is unworthy of divine indwelling.',
+      'Ecclesiology &\nSacraments': 'Significantly undermines sacramental theology: if Christ\'s body is illusory, the Eucharist loses its foundation. Ignatius makes this connection in <em>To the Smyrnaeans</em>. However, Docetism did not typically generate organized counter-churches.',
+      'Scriptural &\nApostolic Continuity': 'Requires significant reinterpretation of Gospel narratives. The <em>Acts of John</em> represents a docetic revision of the Passion. However, docetists generally worked with recognizable scriptures rather than constructing alternative canons.'
+    }
+  }
+];
+
+// Weight presets and state
+const WEIGHT_PRESETS = {
+  equal:     [1, 1, 1, 1, 1, 1],
+  conciliar: [2, 2, 1.5, 1, 1, 1]
+};
+
+const AXIS_SHORT = ['Trinitarian', 'Christology', 'Soteriology', 'Cosmology', 'Ecclesiology', 'Scriptural'];
+
+let currentWeights = [...WEIGHT_PRESETS.equal];
+let currentWeightKey = 'equal';
+
+// Compute weighted averages
+function recomputeAverages() {
+  const totalWeight = currentWeights.reduce((a, b) => a + b, 0);
+  HERESIES.forEach(h => {
+    let weighted = 0;
+    h.scores.forEach((s, i) => { weighted += s * currentWeights[i]; });
+    h.avg = weighted / totalWeight;
+  });
+}
+
+recomputeAverages();
+
+// Alphabetical index mapping
+const ALPHA_ORDER = HERESIES.map((h, i) => ({ name: h.name, idx: i }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+// State
+let activeHeresies = new Set();
+let chart = null;
+
+// Weight preset controls
+function setWeightPreset(key) {
+  currentWeightKey = key;
+
+  // Highlight button
+  document.querySelectorAll('#weightBtnRow .btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.wkey === key);
+  });
+
+  const customDiv = document.getElementById('customWeights');
+
+  if (key === 'custom') {
+    customDiv.style.display = 'block';
+    buildCustomSliders();
+  } else {
+    customDiv.style.display = 'none';
+    currentWeights = [...WEIGHT_PRESETS[key]];
+    recomputeAverages();
+    rebuildRanking();
+    updateDetail();
+  }
+}
+
+function buildCustomSliders() {
+  const container = document.getElementById('customWeights');
+  container.innerHTML = '';
+  AXIS_SHORT.forEach((name, i) => {
+    const row = document.createElement('div');
+    row.className = 'weight-row';
+    row.innerHTML = `
+      <span class="weight-label">${name}</span>
+      <input type="range" class="weight-slider" min="0.5" max="3" step="0.5" value="${currentWeights[i]}" data-idx="${i}">
+      <span class="weight-value" id="wval${i}">${currentWeights[i]}×</span>
+    `;
+    const slider = row.querySelector('.weight-slider');
+    slider.addEventListener('input', function() {
+      const idx = parseInt(this.dataset.idx);
+      currentWeights[idx] = parseFloat(this.value);
+      document.getElementById('wval' + idx).textContent = this.value + '×';
+      recomputeAverages();
+      rebuildRanking();
+      updateDetail();
+    });
+    container.appendChild(row);
+  });
+}
+
+function rebuildRanking() {
+  const container = document.getElementById('rankingBars');
+  container.innerHTML = '';
+  const sorted = HERESIES.map((h, i) => ({ ...h, idx: i })).sort((a, b) => b.avg - a.avg);
+  sorted.forEach(h => {
+    const item = document.createElement('div');
+    item.className = 'ranking-bar-item';
+    item.innerHTML = `
+      <span class="ranking-label">${h.name}</span>
+      <div class="ranking-track">
+        <div class="ranking-fill" style="width:${(h.avg / 10) * 100}%;background:${h.color}"></div>
+      </div>
+      <span class="ranking-value">${h.avg.toFixed(1)}</span>
+    `;
+    item.addEventListener('click', () => {
+      activeHeresies.clear();
+      setActiveCompareBtn(null);
+      toggleHeresy(h.idx);
+    });
+    container.appendChild(item);
+  });
+}
+
+// Color utilities
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function getScoreColor(score) {
+  if (score <= 2) return '#40a868';
+  if (score <= 4) return '#a8a040';
+  if (score <= 6) return '#d4a040';
+  if (score <= 8) return '#c96040';
+  return '#c94040';
+}
+
+// Build sidebar — alphabetical, no scores
+function buildSidebar() {
+  const list = document.getElementById('heresyList');
+  ALPHA_ORDER.forEach(entry => {
+    const h = HERESIES[entry.idx];
+    const li = document.createElement('li');
+    li.className = 'heresy-item';
+    li.dataset.idx = entry.idx;
+    li.innerHTML = `
+      <span class="heresy-swatch" style="background:${h.color}"></span>
+      <span class="heresy-name">${h.name}</span>
+    `;
+    li.addEventListener('click', () => toggleHeresy(entry.idx));
+    list.appendChild(li);
+  });
+}
+
+// Build ranking bars (delegates to rebuildRanking)
+function buildRanking() {
+  rebuildRanking();
+}
+
+// Toggle heresy selection
+function toggleHeresy(idx) {
+  if (activeHeresies.has(idx)) {
+    activeHeresies.delete(idx);
+  } else {
+    activeHeresies.add(idx);
+  }
+  closeNodeTooltip();
+  setActiveCompareBtn(null);
+  updateAll();
+}
+
+function clearHeresySelection() {
+  activeHeresies.clear();
+  closeNodeTooltip();
+  setActiveCompareBtn(null);
+  updateAll();
+}
+
+// Compare button highlight
+let activeCompareKey = null;
+
+function setActiveCompareBtn(key) {
+  activeCompareKey = key;
+  const btns = document.querySelectorAll('#compareBtnRow .btn');
+  btns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.key === key);
+  });
+}
+
+// Compare presets
+function compareAll() {
+  activeHeresies.clear();
+  HERESIES.forEach((_, i) => activeHeresies.add(i));
+  closeNodeTooltip();
+  setActiveCompareBtn('all');
+  updateAll();
+}
+
+// Axis-based compare: select top scorers on a given axis
+function compareByAxis(axisKey) {
+  const axisMap = {
+    'trin': 0, 'chris': 1, 'soter': 2,
+    'cosmo': 3, 'eccl': 4, 'script': 5
+  };
+  const axisIdx = axisMap[axisKey];
+  // Select heresies scoring >= 2.5 on this axis, or top 3, whichever is more
+  const scored = HERESIES.map((h, i) => ({ idx: i, val: h.scores[axisIdx] }))
+    .sort((a, b) => b.val - a.val);
+  const topThree = scored.slice(0, 3).map(s => s.idx);
+  const aboveThreshold = scored.filter(s => s.val >= 5).map(s => s.idx);
+  const selected = new Set([...topThree, ...aboveThreshold]);
+
+  activeHeresies.clear();
+  selected.forEach(i => activeHeresies.add(i));
+  closeNodeTooltip();
+  setActiveCompareBtn(axisKey);
+  updateAll();
+}
+
+function clearCompare() {
+  activeHeresies.clear();
+  closeNodeTooltip();
+  setActiveCompareBtn(null);
+  updateAll();
+}
+
+// Update everything
+function updateAll() {
+  updateSidebar();
+  updateChart();
+  updateDetail();
+}
+
+function updateSidebar() {
+  const items = document.querySelectorAll('.heresy-item');
+  items.forEach(item => {
+    const idx = parseInt(item.dataset.idx);
+    item.classList.toggle('active', activeHeresies.has(idx));
+  });
+}
+
+// Chart
+function initChart() {
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'radar',
+    data: { labels: AXES, datasets: [] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 10,
+          min: 0,
+          ticks: {
+            stepSize: 2,
+            display: true,
+            color: '#5a5040',
+            backdropColor: 'transparent',
+            font: { family: 'Alegreya Sans', size: 10 }
+          },
+          grid: {
+            color: 'rgba(90,80,60,0.45)',
+            lineWidth: 1.5
+          },
+          angleLines: {
+            color: 'rgba(90,80,60,0.4)',
+            lineWidth: 1.5
+          },
+          pointLabels: {
+            color: '#b8aa88',
+            font: {
+              family: 'EB Garamond',
+              size: window.innerWidth < 600 ? 11 : 14,
+              weight: '600'
+            },
+            padding: window.innerWidth < 600 ? 8 : 16
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            color: '#9a8e72',
+            font: { family: 'EB Garamond', size: 12 },
+            padding: 16,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            boxWidth: 8
+          }
+        },
+        tooltip: {
+          backgroundColor: '#2a2219',
+          borderColor: '#3d3428',
+          borderWidth: 1,
+          titleColor: '#d4c5a0',
+          bodyColor: '#9a8e72',
+          titleFont: { family: 'EB Garamond', size: 14, weight: '600' },
+          bodyFont: { family: 'Alegreya Sans', size: 11 },
+          padding: 12,
+          cornerRadius: 4,
+          callbacks: {
+            label: function(ctx) {
+              return `${ctx.dataset.label}: ${ctx.parsed.r}`;
+            }
+          }
+        }
+      },
+      interaction: {
+        intersect: true
+      },
+      animation: {
+        duration: 600,
+        easing: 'easeOutQuart'
+      },
+      onClick: handleChartClick
+    }
+  });
+}
+
+// Handle clicking on chart data points
+
+function handleChartClick(event, elements) {
+  if (!elements || elements.length === 0) {
+    closeNodeTooltip();
+    return;
+  }
+
+  const el = elements[0];
+  const datasetIdx = el.datasetIndex;
+  const pointIdx = el.index;
+  const dataset = chart.data.datasets[datasetIdx];
+
+  // Find which heresy this dataset belongs to
+  const heresy = HERESIES.find(h => h.name === dataset.label);
+  if (!heresy) return;
+
+  const axis = AXES[pointIdx];
+  const score = heresy.scores[pointIdx];
+  const reasoning = heresy.reasoning[axis] || 'No reasoning available.';
+  const color = getScoreColor(score);
+
+  // Position tooltip near the click
+  const tooltip = document.getElementById('nodeTooltip');
+
+  let x, y;
+  if (event.native) {
+    x = event.native.clientX;
+    y = event.native.clientY;
+  } else {
+    const canvasRect = document.getElementById('radarChart').getBoundingClientRect();
+    x = canvasRect.left + canvasRect.width / 2;
+    y = canvasRect.top + canvasRect.height / 2;
+  }
+
+  // Set content
+  document.getElementById('tooltipAxis').textContent = `${heresy.name} · ${axis.replace('\n', ' ')}`;
+  document.getElementById('tooltipScore').textContent = score;
+  document.getElementById('tooltipScore').style.color = color;
+  document.getElementById('tooltipText').innerHTML = reasoning;
+
+  // Position — keep on screen
+  tooltip.style.display = 'block';
+  tooltip.classList.add('visible');
+
+  // Need to read dimensions after display:block
+  requestAnimationFrame(() => {
+    const tw = tooltip.offsetWidth;
+    const th = tooltip.offsetHeight;
+    let left = x + 16;
+    let top = y - th / 2;
+
+    if (left + tw > window.innerWidth - 16) left = x - tw - 16;
+    if (left < 16) left = 16;
+    if (top < 16) top = 16;
+    if (top + th > window.innerHeight - 16) top = window.innerHeight - th - 16;
+
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+  });
+}
+
+function closeNodeTooltip() {
+  const tooltip = document.getElementById('nodeTooltip');
+  tooltip.classList.remove('visible');
+  tooltip.style.display = 'none';
+}
+
+function updateChart() {
+  const datasets = [];
+  activeHeresies.forEach(idx => {
+    const h = HERESIES[idx];
+    datasets.push({
+      label: h.name,
+      data: h.scores,
+      backgroundColor: hexToRgba(h.color, 0.12),
+      borderColor: hexToRgba(h.color, 0.9),
+      borderWidth: 2.5,
+      pointBackgroundColor: h.color,
+      pointBorderColor: h.color,
+      pointRadius: 5,
+      pointHoverRadius: 8,
+      pointHoverBorderWidth: 2.5,
+      pointHoverBorderColor: '#d4c5a0',
+      pointHitRadius: 5
+    });
+  });
+
+  chart.data.datasets = datasets;
+  chart.update();
+}
+
+// Detail panel
+function updateDetail() {
+  const panel = document.getElementById('detailPanel');
+  if (activeHeresies.size !== 1) {
+    panel.classList.remove('visible');
+    return;
+  }
+
+  const idx = [...activeHeresies][0];
+  const h = HERESIES[idx];
+  panel.classList.add('visible');
+
+  document.getElementById('detailTitle').textContent = h.name;
+  document.getElementById('detailAvg').textContent = `AVG ${h.avg.toFixed(1)} / 10`;
+
+  const grid = document.getElementById('detailGrid');
+  grid.innerHTML = '';
+  AXES.forEach((axis, i) => {
+    const score = h.scores[i];
+    const color = getScoreColor(score);
+    const div = document.createElement('div');
+    div.className = 'detail-axis';
+    div.innerHTML = `
+      <div class="detail-axis-header">
+        <span class="detail-axis-name">${axis.replace('\n', ' ')}</span>
+        <span class="detail-axis-score" style="color:${color}">${score}</span>
+      </div>
+      <div class="detail-bar-track">
+        <div class="detail-bar-fill" style="width:${(score / 10) * 100}%;background:${color}"></div>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+
+  // Reasoning
+  const reasoningDiv = document.getElementById('detailReasoning');
+  let html = '';
+  AXES.forEach((axis, i) => {
+    const r = h.reasoning[axis];
+    if (r) {
+      html += `<p><strong>${axis.replace('\n', ' ')}:</strong> ${r}</p>`;
+    }
+  });
+  reasoningDiv.innerHTML = html;
+  reasoningDiv.classList.remove('expanded');
+  document.getElementById('toggleArrow').classList.remove('open');
+}
+
+function toggleReasoning() {
+  const r = document.getElementById('detailReasoning');
+  const arrow = document.getElementById('toggleArrow');
+  r.classList.toggle('expanded');
+  arrow.classList.toggle('open');
+}
+
+// Init
+buildSidebar();
+buildRanking();
+initChart();
+
+// Responsive chart label sizing on resize/orientation change
+window.addEventListener('resize', function() {
+  if (!chart) return;
+  const isMobile = window.innerWidth < 600;
+  chart.options.scales.r.pointLabels.font.size = isMobile ? 11 : 14;
+  chart.options.scales.r.pointLabels.padding = isMobile ? 8 : 16;
+  chart.update();
+});
+
+// Select first alphabetically by default
+// (none — page opens clean)
+</script>
+
+</body>
+</html>
