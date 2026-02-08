@@ -342,6 +342,7 @@
     flex-direction: column;
     align-items: center;
     position: relative;
+    overflow: visible;
   }
 
   .chart-container {
@@ -349,6 +350,18 @@
     max-width: 740px;
     aspect-ratio: 1;
     position: relative;
+    padding: 0.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .chart-container {
+      padding: 0.25rem;
+      max-width: 100%;
+    }
+
+    .chart-area {
+      padding: 0 0.5rem;
+    }
   }
 
   /* Detail panel */
@@ -816,6 +829,19 @@ const AXES = [
   'Scriptural &\nApostolic Continuity'
 ];
 
+const AXES_MOBILE = [
+  'Trinitarian',
+  'Christology',
+  'Soteriology',
+  'Cosmology',
+  'Ecclesiology',
+  'Scriptural'
+];
+
+function getAxesLabels() {
+  return window.innerWidth < 600 ? AXES_MOBILE : AXES;
+}
+
 const HERESIES = [
   {
     name: 'Marcionism',
@@ -1185,7 +1211,7 @@ function initChart() {
   const ctx = document.getElementById('radarChart').getContext('2d');
   chart = new Chart(ctx, {
     type: 'radar',
-    data: { labels: AXES, datasets: [] },
+    data: { labels: getAxesLabels(), datasets: [] },
     options: {
       responsive: true,
       maintainAspectRatio: true,
@@ -1418,6 +1444,7 @@ initChart();
 window.addEventListener('resize', function() {
   if (!chart) return;
   const isMobile = window.innerWidth < 600;
+  chart.data.labels = getAxesLabels();
   chart.options.scales.r.pointLabels.font.size = isMobile ? 11 : 14;
   chart.options.scales.r.pointLabels.padding = isMobile ? 8 : 16;
   chart.update();
