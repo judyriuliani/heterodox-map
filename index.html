@@ -722,6 +722,89 @@
     letter-spacing: 0.05em;
     color: var(--text-dim);
   }
+  /* FAQ section */
+  .faq-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-section h2 {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1.25rem;
+  }
+
+  .faq-item {
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .faq-item summary {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--cream);
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 44px;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::before {
+    content: '▸';
+    color: var(--gold-dim);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+
+  .faq-item[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  .faq-item summary:hover {
+    background: var(--parchment-light);
+  }
+
+  .faq-item p {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+    padding: 0 1rem 1rem 2.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .faq-section {
+      padding: 1.5rem 1rem;
+    }
+
+    .faq-item summary {
+      font-size: 0.88rem;
+    }
+
+    .faq-item p {
+      padding-left: 1rem;
+      padding-right: 0.75rem;
+    }
+  }
 </style>
 </head>
 <body>
@@ -818,6 +901,45 @@
     <div class="scale-item"><span class="scale-num">10</span><span class="scale-desc">Anathema</span></div>
   </div>
 </footer>
+
+<section class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+
+  <details class="faq-item">
+    <summary>Why are Manichaeism and Marcionism such outliers?</summary>
+    <p>Because they deviate on nearly every axis simultaneously. Most heresies are errors of emphasis or precision within a recognizably Christian framework — Arianism gets the Trinity wrong but preserves creation theology, scripture, and ecclesial structure. Manichaeism and Marcionism, by contrast, introduce alternative cosmologies, alternative scriptures, and alternative institutional structures. They aren't adjusting one doctrine; they're replacing the entire system. That breadth of deviation is what the radar chart makes visible.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Is Manichaeism really a Christian heresy? Isn't it a separate religion?</summary>
+    <p>This is a legitimate objection. Mani drew on Christianity, Zoroastrianism, and Buddhism, and the Manichaean church had its own scriptures, hierarchy, and cosmology. Augustine, however, treated it as a Christian heresy — he had been a Manichaean Hearer for nine years before his conversion — and the Church condemned it as one. Its inclusion here follows the patristic classification rather than the modern history-of-religions approach. Its extreme scores across all axes arguably confirm the objection: it behaves less like a deviation from Christianity than like an alternative to it.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Why do Nestorianism and Monophysitism score so similarly when they're usually treated as opposite errors?</summary>
+    <p>They are opposite errors — one over-divides Christ's natures, the other over-unifies them — but both produce comparable downstream consequences. Each compromises the soteriological exchange (if the natures aren't properly related, the saving work is at risk), each generated lasting schisms, and each was condemned by ecumenical councils with similar levels of severity. The radar chart captures consequences and formal condemnation, not the direction of the error. Their profiles are similar in magnitude but differ in shape: Nestorianism scores higher on Christology (8 vs. 7) because the conciliar response at Ephesus was more decisive, while Monophysitism scores slightly higher on Ecclesiology (4 vs. 3) because the resulting schism proved more durable.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Montanism scores relatively low. Didn't the Church take it seriously?</summary>
+    <p>Very seriously — but the Church's concern with Montanism was primarily disciplinary and ecclesiological, not doctrinal. Montanists were broadly orthodox on the Trinity, Christology, creation, and soteriology. Their errors clustered around prophetic authority, rigorism, and the claim that the Paraclete was delivering new binding revelation. The tool captures this accurately: Montanism scores 7 on Ecclesiology and 6 on Scriptural Continuity, but near zero on the theological axes. A low composite score doesn't mean a heresy wasn't dangerous — it means the danger was concentrated rather than systemic.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>How can Pelagianism's composite score be so low when it was condemned at multiple councils?</summary>
+    <p>Pelagianism is the most concentrated heresy in the dataset. It scores 10 on Soteriology — the maximum — because it directly and formally contradicts the doctrine of grace as defined at Carthage (418) and Orange (529). But Pelagius affirmed the Nicene Creed, accepted the canonical scriptures, worked within the Church's institutional structure, and held an orthodox cosmology. His error was deep but narrow. The composite score reflects breadth of deviation; the individual axis score reflects depth. Both matter, which is why the tool shows both.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Why is Docetism treated as a single heresy? It appears in many different movements.</summary>
+    <p>Docetism is better understood as a Christological tendency than a unified movement — it appears in various Gnostic systems, in Marcion, and in other contexts. It is treated here as a standalone entry because the patristic sources (particularly Ignatius and Irenaeus) address it as a distinct claim: that Christ's humanity was apparent rather than real. Scoring it separately allows the tool to isolate the consequences of that specific claim across all six axes, rather than burying it within whichever movement happened to adopt it.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Why is there no axis for eschatology?</summary>
+    <p>Eschatological questions were rarely the subject of formal conciliar condemnation in the period covered here. Montanist millenarianism and Origenist universalism were controversial, but the councils did not produce the kind of definitive doctrinal boundary on eschatology that they did on the Trinity, Christology, or soteriology. Adding an eschatological axis would produce mostly zeros with a few low scores, contributing noise rather than differentiation. The decision to exclude it is documented in the methodology.</p>
+  </details>
+</section>
 
 <script>
 const AXES = [
