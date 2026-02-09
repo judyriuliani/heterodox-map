@@ -995,147 +995,145 @@ function getAxesLabels() {
 const HERESIES = [
   {
     name: 'Marcionism',
-    // Old: [4.5, 4.0, 3.5, 5.0, 3.0, 5.0] → avg 4.17
+    // Old: [4.5, 4.0, 3.5, 5.0, 3.0, 5.0] avg 4.17
     scores: [9, 8, 7, 10, 6, 10],
     color: '#c94040',
     reasoning: {
-      'Trinitarian\nTheology': 'Marcion posits two entirely separate Gods—the wrathful Creator of the OT and an alien God of love revealed by Christ. Tertullian\'s <em>Against Marcion</em> I.3 devotes its opening to refuting the "two gods" thesis. Not a full 10 because Marcion does not construct an elaborate polytheistic system.',
-      'Christology': 'Marcion held a docetic Christology: Christ appeared without birth or genuine flesh. Tertullian (<em>AM</em> III.8–11) confirms the denial of real incarnation. Slightly below full docetism because Marcion affirmed Christ\'s genuine suffering in appearance.',
-      'Soteriology': 'Salvation is rescue from the Creator-God\'s domain by an alien God with no prior relation to creation. The bond between creation and redemption is severed. The error is in the framework of salvation rather than its mechanism.',
-      'Cosmology &\nCreation': 'The defining feature. The material world is the product of an inferior Creator-God, wholly separate from the Father of Jesus Christ. A complete inversion of <em>creatio ex nihilo</em> by a good God. Tertullian devotes two books to refuting this.',
-      'Ecclesiology &\nSacraments': 'Marcion established a parallel church with clergy, sacraments, and liturgy, reinterpreted within his two-God framework. The Marcionite church survived for centuries.',
-      'Scriptural &\nApostolic Continuity': 'Marcion rejected the entire OT, radically edited Luke and Paul\'s epistles. This forced the orthodox church to formalize its own canon. A full break with scriptural continuity.'
+      'Trinitarian\nTheology': 'Marcion doesn\'t just get the Trinity wrong. He posits two entirely separate Gods: the wrathful Creator of the Old Testament and an alien God of love revealed by Christ. That\'s not a Trinitarian error in the usual sense; it\'s a wholesale replacement of monotheism with a dualist theology. Not a full 10 because Marcion doesn\'t build an elaborate polytheistic hierarchy the way some Gnostic systems do.',
+      'Christology': 'Christ appears without genuine birth or real flesh, a form of docetism, though Marcion affirmed that Christ genuinely suffered, at least in appearance. The Incarnation as the Church understood it simply doesn\'t happen in Marcion\'s system.',
+      'Soteriology': 'Salvation becomes rescue from the Creator-God\'s domain by a previously unknown God who has no prior relation to creation. That severs the bond between creation and redemption that patristic soteriology depends on. The error is less about how salvation works than about what salvation is saving you from.',
+      'Cosmology &\nCreation': 'This is the defining Marcionite claim. The material world is the product of an inferior Creator-God, entirely separate from the Father of Jesus Christ. It\'s a complete inversion of creation by a good God, as far from Genesis 1 as you can get within a broadly Christian framework.',
+      'Ecclesiology &\nSacraments': 'Marcion didn\'t just leave the Church. He built a parallel one, with its own clergy, sacraments, and liturgy, all reinterpreted within his two-God framework. The Marcionite church survived for centuries as a genuine institutional rival.',
+      'Scriptural &\nApostolic Continuity': 'Marcion rejected the entire Old Testament and radically edited Luke and Paul\'s epistles to remove anything he considered contaminated by the Creator-God. This is the most decisive break with scriptural continuity in the dataset. Ironically, it forced the orthodox church to begin formalizing its own canon.'
     }
   },
   {
     name: 'Monarchianism',
-    // Old: [5.0, 3.0, 1.5, 0.5, 1.0, 1.0] → avg 2.00
+    // Old: [5.0, 3.0, 1.5, 0.5, 1.0, 1.0] avg 2.00
     scores: [10, 6, 3, 1, 2, 2],
     color: '#d4a040',
     reasoning: {
-      'Trinitarian\nTheology': 'Father, Son, and Spirit are modes of one divine monad, not distinct persons. Directly and completely contradicts Nicene-Constantinopolitan hypostatic distinction. The patripassian implication—the Father suffered on the cross—was considered particularly objectionable.',
-      'Christology': 'Collapses the Son into the Father, eliminating the distinct personal existence of the incarnate Logos. However, it affirms the full divinity of the one incarnate—indeed, too much divinity. The humanity of Christ is not directly denied.',
-      'Soteriology': 'Does not directly challenge soteriology. The modalist can still affirm that God saves. The problem is indirect: if there is no distinct Son, the mediatorial role becomes difficult to sustain.',
-      'Cosmology &\nCreation': 'Monarchians affirm creation <em>ex nihilo</em> by the one God. No dualism or emanation. Essentially orthodox cosmology.',
-      'Ecclesiology &\nSacraments': 'Did not generate a counter-church. Modalism was popular among Roman clergy, operating within existing ecclesial structures.',
-      'Scriptural &\nApostolic Continuity': 'Monarchians appealed to the same scriptures as the orthodox. Their error was in interpretation, not in canon or succession.'
+      'Trinitarian\nTheology': 'Father, Son, and Spirit are modes or masks of a single divine monad, not distinct persons. This directly and completely contradicts the Nicene-Constantinopolitan distinction of three hypostases. The patripassian implication, that the Father himself suffered on the cross, was considered especially scandalous.',
+      'Christology': 'If the Son has no distinct personal existence, then the Incarnation isn\'t the Second Person taking flesh. It\'s the one God temporarily appearing as a man. That collapses the Logos theology that grounds orthodox Christology. Paradoxically, the problem is too much divinity in the wrong configuration, not too little.',
+      'Soteriology': 'The soteriological damage is indirect. A modalist can still affirm that God saves. The question is whether the mediatorial role of the Son as a distinct person can be sustained. It can\'t, but the practical effects on how salvation is experienced are subtle.',
+      'Cosmology &\nCreation': 'Monarchians affirm creation by the one God. No dualism, no emanation, no rival deity. The cosmology is essentially orthodox.',
+      'Ecclesiology &\nSacraments': 'Modalism didn\'t generate a counter-church. It was popular among Roman clergy and operated entirely within existing ecclesial structures, which is part of why it was so hard to root out.',
+      'Scriptural &\nApostolic Continuity': 'Monarchians read the same scriptures as everyone else. Their error was in how they interpreted passages about the Father-Son relationship, not in rejecting the canon or breaking with apostolic succession.'
     }
   },
   {
     name: 'Manichaeism',
-    // Old: [4.0, 4.0, 4.0, 5.0, 4.5, 4.5] → avg 4.33
+    // Old: [4.0, 4.0, 4.0, 5.0, 4.5, 4.5] avg 4.33
     scores: [8, 8, 8, 10, 9, 9],
     color: '#8040c9',
     reasoning: {
-      'Trinitarian\nTheology': 'Replaces the Trinity with a dualist cosmology of Light and Darkness. Mani incorporated Jesus as a cosmic figure (Jesus the Splendor), but significantly recontextualized. Not 10 because Manichaeism replaces rather than directly denies the Trinity.',
-      'Christology': 'Mani\'s Christ is a cosmic emanation of Light, not the incarnate Logos. The Manichaean Jesus did not take a body of flesh but—contrary to simple docetism—truly suffers on the cross as a revelation of the suffering of all souls. The deviation is severe but more nuanced than straightforward docetism.',
-      'Soteriology': 'Salvation is liberation of Light particles trapped in matter through gnosis and asceticism—not redemption from sin through grace. The mechanism, agent, and goal are all fundamentally different.',
-      'Cosmology &\nCreation': 'Full metaphysical dualism: two coeternal principles in perpetual conflict. The material world results from a cosmic mixing of Light and Darkness. The furthest departure from <em>creatio ex nihilo</em>. Augustine devotes chapters 25–37 of <em>AFE</em> to refuting this.',
-      'Ecclesiology &\nSacraments': 'A completely separate hierarchy (Elect and Hearers), canonical corpus, and liturgy—though Mani consistently called himself \"apostle of Jesus Christ\" and his church claimed to be the true Christianity, not a replacement. The institutional departure is extreme even if the self-understanding was reformist.',
-      'Scriptural &\nApostolic Continuity': 'Mani composed his own scriptures and claimed Paraclete authority. However, Manichaeans shared extensive scriptural ground with other Christians—the Diatessaron, the full Pauline corpus, and various canonical texts. Not total rupture, but a radical supplementation and reframing of the tradition.'
+      'Trinitarian\nTheology': 'Manichaeism replaces the Trinity with a dualist cosmology of Light and Darkness. Mani does incorporate Jesus as a cosmic figure, but in a radically different role: not the Second Person of a Trinity but a messenger within a mythological framework. Not 10 because this is replacement rather than direct denial. Mani isn\'t arguing against the Trinity so much as inhabiting a different theological universe.',
+      'Christology': 'Mani\'s Christ is a cosmic emanation of Light, not the incarnate Logos. The Manichaean Jesus did not take a body of flesh, but he truly suffers on the cross as a revelation of the suffering of all souls trapped in matter. That\'s not simple docetism. The deviation is severe, but more theologically interesting than a flat denial of the Incarnation.',
+      'Soteriology': 'Salvation is the liberation of particles of Light trapped in matter, achieved through gnosis and rigorous ascetic practice, not redemption from sin through grace. The mechanism is different: knowledge rather than atonement. The agent is different: the self rather than Christ. The goal is different: escape from matter rather than resurrection of the body.',
+      'Cosmology &\nCreation': 'Two coeternal principles, Light and Darkness, locked in perpetual conflict. The material world results from a catastrophic mixing of the two. This is the most extreme departure from creation by a good God in the entire dataset. Manichaeans did affirm God as creator through subordinate powers, but the framework is so far from Genesis that the affirmation barely registers.',
+      'Ecclesiology &\nSacraments': 'Manichaeism had a completely separate hierarchy of Elect and Hearers, its own canonical corpus, and its own liturgical life. And yet Mani consistently called himself "apostle of Jesus Christ" and his church claimed to represent true Christianity, not to replace it. The institutional departure is extreme even though the self-understanding was reformist rather than supersessionist.',
+      'Scriptural &\nApostolic Continuity': 'Mani composed his own scriptures and claimed the authority of the Paraclete. But the Manichaeans also shared extensive scriptural ground with other Christians: the Diatessaron, the full Pauline corpus, various canonical and non-canonical texts. This isn\'t total rupture so much as radical supplementation. The old scriptures are acknowledged but reframed by a new and supposedly definitive revelation.'
     }
   },
   {
     name: 'Pelagianism',
-    // Old: [0, 0.5, 5.0, 0, 2.0, 0.5] → avg 1.33
+    // Old: [0, 0.5, 5.0, 0, 2.0, 0.5] avg 1.33
     scores: [0, 1, 10, 0, 4, 1],
     color: '#40a868',
     reasoning: {
-      'Trinitarian\nTheology': 'Pelagius affirmed the full Nicene faith. His errors were anthropological and soteriological, not trinitarian.',
-      'Christology': 'No direct Christological denial. However, Augustine (<em>ONG</em> ch. 47) notes Pelagianism reduces Christ to a moral exemplar, indirectly diminishing the reason for the Incarnation.',
-      'Soteriology': 'The defining error. Denied original sin, affirmed human capacity to avoid sin without grace. Augustine\'s <em>On Nature and Grace</em> devotes 84 chapters to refuting this. Formally condemned at Carthage (418) and Orange (529).',
-      'Cosmology &\nCreation': 'Affirmed orthodox creation doctrine. His high view of created goodness was the problem—he refused to acknowledge the Fall had damaged it.',
-      'Ecclesiology &\nSacraments': 'Undermines the logic of infant baptism and diminishes sacramental necessity. However, Pelagius did not reject Church authority or establish a counter-church.',
-      'Scriptural &\nApostolic Continuity': 'Worked within canonical scriptures and claimed apostolic warrant. The error was exegetical—misreading Paul—not canon rejection.'
+      'Trinitarian\nTheology': 'Pelagius affirmed the full Nicene faith. His errors were entirely anthropological and soteriological. He had no quarrel with the doctrine of God.',
+      'Christology': 'No direct Christological denial. But if human beings can avoid sin without grace, Christ\'s role shrinks from savior who transforms human nature to moral exemplar who shows the way. That indirectly diminishes the reason the Incarnation was necessary, even though Pelagius never denied the Incarnation itself.',
+      'Soteriology': 'This is the axis that matters. Pelagius denied original sin, affirmed that human nature retains full capacity to avoid sin without grace, and reduced grace to external aids: law, teaching, the example of Christ. Formally condemned at Carthage in 418 and Orange in 529. A complete inversion of the Augustinian doctrine of grace, and the reason this heresy gets a 10 on one axis and near-zero on everything else.',
+      'Cosmology &\nCreation': 'Pelagius affirmed orthodox creation doctrine. His high view of human nature\'s created goodness was precisely the problem. He refused to acknowledge that the Fall had damaged it.',
+      'Ecclesiology &\nSacraments': 'If there\'s no original sin, why baptize infants for the remission of sins? And if human nature is self-sufficient, sacraments become helpful aids rather than necessities. The logic of the sacramental economy is weakened, even though Pelagius didn\'t reject the Church\'s authority or start a rival institution.',
+      'Scriptural &\nApostolic Continuity': 'Pelagius worked within canonical scriptures and claimed apostolic warrant. His error was exegetical, a misreading of Paul on sin and grace, not a rejection of the canon or a break with apostolic succession.'
     }
   },
   {
     name: 'Nestorianism',
-    // Old: [0.5, 4.0, 2.5, 0, 1.5, 0.5] → avg 1.50; revised Christology
+    // Old: [0.5, 4.0, 2.5, 0, 1.5, 0.5] avg 1.50; revised Christology
     scores: [1, 7, 5, 0, 3, 1],
     color: '#4080c9',
     reasoning: {
-      'Trinitarian\nTheology': 'Nestorius\'s error is Christological, not Trinitarian. He affirmed the full Nicene faith regarding the Trinity.',
-      'Christology': 'Resisted <em>Theotokos</em> and spoke of two <em>prosopa</em> in ways that appeared to divide Christ. However, the dispute was fundamentally a philosophical impasse over terminology. Nestorius defended Christ\'s full humanity against what he saw as Apollinarian tendencies. The Church of the East\'s 486 creed affirms union in "one lordship" and "perfect and inseparable conjunction." Scored 7 rather than 8 to reflect this scholarly reassessment.',
-      'Soteriology': 'If Christ\'s natures are not truly united, the soteriological exchange is compromised. Gregory Nazianzen\'s principle is not violated (both natures affirmed) but the unity of the saving act is at risk.',
-      'Cosmology &\nCreation': 'No cosmological deviation.',
-      'Ecclesiology &\nSacraments': 'Generated a major schism (Church of the East), but this was as much political as theological. Sacramental practice was preserved.',
-      'Scriptural &\nApostolic Continuity': 'Worked entirely within the canonical and apostolic framework. Error was in theological interpretation.'
+      'Trinitarian\nTheology': 'Nestorius\'s error is Christological, not Trinitarian. He affirmed the full Nicene faith without reservation.',
+      'Christology': 'Nestorius resisted calling Mary <em>Theotokos</em> and spoke of two <em>prosopa</em> in ways that appeared to divide Christ into two subjects. But the dispute was fundamentally a philosophical impasse. Nestorius and Cyril largely agreed on the terms of the debate but meant drastically different things by them. Nestorius was trying to protect the full humanity of Christ against what he saw as Apollinarian tendencies in Cyril. The Church of the East\'s 486 creed affirms the two natures united in "one lordship" and "perfect and inseparable conjunction," not two separate Christs. Scored 7 rather than higher to reflect the scholarly consensus that Nestorius\'s actual position was closer to orthodoxy than Ephesus implied.',
+      'Soteriology': 'If Christ\'s natures are not truly united in one person, the soteriological exchange is compromised: God becoming human so humanity can share in divinity. Gregory Nazianzen\'s "what is not assumed is not healed" isn\'t violated here, since Nestorius affirms both natures, but the unity of the saving act is at risk. A real problem, but derivative of the Christological one.',
+      'Cosmology &\nCreation': 'No cosmological deviation whatsoever.',
+      'Ecclesiology &\nSacraments': 'Nestorianism generated a major and lasting schism. The Church of the East eventually stretched from Mesopotamia to China. But the split was as much political and geographical as theological. Sacramental practice was fully preserved.',
+      'Scriptural &\nApostolic Continuity': 'Nestorius worked entirely within the canonical and apostolic framework. His error was in theological interpretation of the union of natures, not in any rejection of scripture or tradition.'
     }
   },
   {
     name: 'Monophysitism',
-    // Old: [0.5, 3.5, 2.5, 0, 2.0, 0.5] → avg 1.50; revised Christology
+    // Old: [0.5, 3.5, 2.5, 0, 2.0, 0.5] avg 1.50; revised Christology
     scores: [1, 6, 5, 0, 4, 1],
     color: '#4dc9c0',
     reasoning: {
-      'Trinitarian\nTheology': 'A Christological rather than Trinitarian error. The Trinity is affirmed.',
-      'Christology': 'Eutyches taught Christ had only one nature after the union—humanity absorbed into divinity. However, Eutyches\'s own writings are lost and "there is some question as to whether Eutyches actually held the views attributed to him." The miaphysite tradition (Oriental Orthodox) explicitly rejects Eutychianism. Scored 6 to reflect this ambiguity and the distinction between monophysitism proper and miaphysitism.',
-      'Soteriology': 'If human nature is absorbed, humanity is not truly assumed and therefore not truly healed. Leo\'s <em>Tome</em> emphasizes that each nature performs its proper operations for salvation.',
-      'Cosmology &\nCreation': 'No cosmological deviation.',
-      'Ecclesiology &\nSacraments': 'Generated lasting schisms (Oriental Orthodox churches). The miaphysites claimed continuity with apostolic tradition. Sacramental practice was preserved.',
-      'Scriptural &\nApostolic Continuity': 'Worked within the canonical framework, claiming Cyril and Athanasius as authorities.'
+      'Trinitarian\nTheology': 'A Christological error, not a Trinitarian one. The Trinity is fully affirmed.',
+      'Christology': 'The position condemned at Chalcedon, associated with Eutyches, holds that Christ had only one nature after the Incarnation, with humanity absorbed into divinity. But Eutyches\'s own writings are lost, and we rely entirely on hostile representations of his views. There\'s genuine uncertainty about what he actually taught. Meanwhile, the miaphysite tradition of the Oriental Orthodox churches explicitly rejects Eutychianism and insists on a united nature "without confusion, without change." Scored 6 to reflect this ambiguity and the important distinction between monophysitism proper and miaphysitism.',
+      'Soteriology': 'The soteriological problem is the mirror image of Nestorianism\'s. If Christ\'s human nature is absorbed into divinity, then humanity is not truly assumed and therefore not truly healed, per Gregory Nazianzen\'s axiom. Leo\'s <em>Tome</em> makes the point that each nature must perform its proper operations for salvation to work.',
+      'Cosmology &\nCreation': 'No cosmological deviation whatsoever.',
+      'Ecclesiology &\nSacraments': 'The resulting schism was among the most durable in Christian history. The Oriental Orthodox churches, Coptic, Armenian, Syriac, and Ethiopian, remain separate communions to this day. But the miaphysites claimed full continuity with apostolic tradition, and sacramental practice was preserved intact.',
+      'Scriptural &\nApostolic Continuity': 'Worked within the canonical framework, claiming Cyril of Alexandria and Athanasius as their primary authorities. No break with scripture or apostolic succession.'
     }
   },
   {
     name: 'Arianism',
-    // Old: [5.0, 4.0, 4.5, 0.5, 2.0, 1.0] → avg 2.83
+    // Old: [5.0, 4.0, 4.5, 0.5, 2.0, 1.0] avg 2.83
     scores: [10, 8, 9, 1, 4, 2],
     color: '#c96040',
     reasoning: {
-      'Trinitarian\nTheology': 'The Son is a creature—"there was a time when he was not." Formally condemned at Nicaea with explicit anathemas. Arius denied <em>homoousios</em>, co-eternity, and substantial unity with the Father. The paradigmatic Trinitarian heresy.',
-      'Christology': 'If the Logos is a creature, the Incarnation is not God becoming human but a supreme creature taking flesh. However, Arius affirmed the reality of the Incarnation—the humanity is not denied, the divinity is.',
-      'Soteriology': 'Athanasius\'s core argument: only God can save. If Christ is a creature, salvation is impossible. Arius affirmed Christ as savior but made the claim difficult to sustain.',
-      'Cosmology &\nCreation': 'Affirms creation <em>ex nihilo</em> by the one God. The Logos is the agent of creation but is himself created. The error is in the agent\'s status, not the cosmological framework.',
-      'Ecclesiology &\nSacraments': 'Deeply divided the Church with imperial backing, but Arians competed for control of the same institution rather than rejecting its structure.',
-      'Scriptural &\nApostolic Continuity': 'Worked within canonical scriptures, claiming biblical warrant (especially Prov. 8:22). Arius saw himself as defending received tradition.'
+      'Trinitarian\nTheology': 'The paradigmatic Trinitarian heresy. The Son is a creature: "there was a time when he was not." Arius denied <em>homoousios</em>, co-eternity, and substantial unity with the Father. Formally condemned at Nicaea with explicit anathemas. This is the error the entire conciliar apparatus was built to address.',
+      'Christology': 'If the Logos is a creature, then the Incarnation is not God becoming human but a supreme created being taking flesh. Arius affirmed the reality of Christ\'s humanity, so the problem isn\'t a deficient human nature. It\'s a deficient divine one. The Incarnation happens, but it can\'t do what orthodox soteriology needs it to do.',
+      'Soteriology': 'Athanasius\'s core argument is devastatingly simple: only God can save. If Christ is a creature, however exalted, the ontological gap between God and humanity remains unbridged. Arius affirmed Christ as savior, but his own metaphysics made the claim nearly impossible to sustain.',
+      'Cosmology &\nCreation': 'Arius affirms creation <em>ex nihilo</em> by the one God. The Logos is the agent of creation but is himself created, "first-born of all creation" read with full ontological force. The error is in the agent\'s status, not in the cosmological framework itself.',
+      'Ecclesiology &\nSacraments': 'Arianism deeply divided the Church and at times commanded imperial backing, but Arians competed for control of the same institutional Church rather than building a parallel one. The struggle was over who got to be "the Church," not whether there should be one.',
+      'Scriptural &\nApostolic Continuity': 'Arius worked within canonical scriptures, claiming strong biblical warrant, especially Proverbs 8:22. He saw himself as defending received tradition, not innovating. The error is exegetical, not canonical.'
     }
   },
   {
     name: 'Montanism',
-    // Old: [1.5, 0.5, 1.5, 0, 3.5, 3.0] → avg 1.67
+    // Old: [1.5, 0.5, 1.5, 0, 3.5, 3.0] avg 1.67
     scores: [3, 1, 3, 0, 7, 6],
     color: '#a8a040',
     reasoning: {
-      'Trinitarian\nTheology': 'The Paraclete question is ambiguous. Montanus\'s oracles could suggest modalism, but likely reflect ecstatic speech rather than considered theology. Tertullian, the most sophisticated Montanist, actually advanced Trinitarian theology.',
-      'Christology': 'No distinctively Montanist Christological deviation. Tertullian\'s Christology is robustly orthodox.',
-      'Soteriology': 'Montanist rigorism distorts the economy of grace by denying the Church\'s power to reconcile penitent sinners. A real deviation but within a broadly orthodox framework.',
-      'Cosmology &\nCreation': 'No cosmological deviation. Eschatological intensity is not a cosmological error.',
-      'Ecclesiology &\nSacraments': 'The most significant axis. Claimed ongoing prophetic revelation superior to episcopal authority, established parallel leadership, demanded rebaptism, denied forgiveness for serious sins.',
-      'Scriptural &\nApostolic Continuity': 'Did not reject canonical scriptures but claimed supplementary, binding revelation through the Paraclete. A different kind of break from Marcion\'s—not subtraction but unauthorized addition.'
+      'Trinitarian\nTheology': 'The Paraclete question is ambiguous. Montanus\'s ecstatic oracles could be read as modalist, but they likely reflect the idiom of prophetic speech rather than considered Trinitarian theology. Tellingly, the most sophisticated Montanist, Tertullian, actually advanced Trinitarian thought.',
+      'Christology': 'No distinctively Montanist Christological deviation. Tertullian\'s Christology is robustly orthodox. Whatever the movement\'s problems were, they weren\'t about the person of Christ.',
+      'Soteriology': 'Montanist rigorism distorts the economy of grace by denying the Church\'s power to reconcile penitent sinners after baptism. That\'s a real deviation. It narrows the scope of salvation. But it operates within a broadly orthodox soteriological framework rather than replacing it.',
+      'Cosmology &\nCreation': 'No cosmological deviation. Eschatological urgency and millenarian expectation are not cosmological errors, even if they worried the bishops.',
+      'Ecclesiology &\nSacraments': 'This is where Montanism is most disruptive. The movement claimed ongoing prophetic revelation that trumped episcopal authority, established parallel leadership structures, demanded rebaptism of converts, and denied forgiveness for certain serious sins. It challenged the institutional Church\'s self-understanding more directly than many doctrinally worse heresies.',
+      'Scriptural &\nApostolic Continuity': 'Montanists didn\'t reject canonical scriptures. They claimed supplementary, binding revelation through the Paraclete. It\'s a different kind of break from Marcion\'s: not subtraction from the canon but unauthorized addition to it. The principle of a closed apostolic deposit is what\'s at stake.'
     }
   },
   {
     name: 'Apollinarianism',
-    // Old: [0.5, 4.5, 4.0, 0, 1.0, 0.5] → avg 1.75
+    // Old: [0.5, 4.5, 4.0, 0, 1.0, 0.5] avg 1.75
     scores: [1, 9, 8, 0, 2, 1],
     color: '#c940a8',
     reasoning: {
-      'Trinitarian\nTheology': 'Apollinarius affirmed Nicene Trinitarianism and was a vigorous anti-Arian defender of <em>homoousios</em>.',
-      'Christology': 'Denied Christ possessed a human rational soul, replacing it with the divine Logos. Directly contradicts Chalcedon\'s "complete in his humanity." Condemned at Constantinople I (381). Scored 9: he affirmed real flesh, so the humanity was truncated rather than denied outright.',
-      'Soteriology': 'Gregory Nazianzen\'s axiom: "what is not assumed is not healed." The human mind needs redemption; if Christ did not assume it, it remains unhealed. A serious soteriological consequence even though Apollinarius intended to protect Christ\'s saving divinity.',
-      'Cosmology &\nCreation': 'No cosmological deviation.',
-      'Ecclesiology &\nSacraments': 'Generated a brief schism, quickly suppressed after 381. Did not produce a lasting counter-church.',
-      'Scriptural &\nApostolic Continuity': 'Worked within canonical and apostolic framework. Error was in metaphysical reasoning about the Incarnation.'
+      'Trinitarian\nTheology': 'Apollinarius was a vigorous anti-Arian and a committed defender of Nicene <em>homoousios</em>. His Trinitarian theology was not the problem.',
+      'Christology': 'Apollinarius denied that Christ possessed a human rational soul, arguing that the divine Logos took its place. He thought this was an elegant solution to the problem of how one person could be both divine and human, but it meant Christ wasn\'t fully human. Condemned at Constantinople I in 381. Scored 9 rather than 10 because he affirmed real flesh; the humanity was truncated rather than denied outright.',
+      'Soteriology': 'Gregory Nazianzen\'s famous axiom was formulated precisely against this position: "what is not assumed is not healed." If Christ didn\'t assume a human mind, the human mind remains unredeemed. The soteriological consequences are severe, even though Apollinarius intended to protect Christ\'s saving divinity, not undermine it.',
+      'Cosmology &\nCreation': 'No cosmological deviation whatsoever.',
+      'Ecclesiology &\nSacraments': 'Apollinarianism generated a brief schism that was quickly suppressed after 381. It did not produce a lasting counter-church or a distinctive sacramental theology.',
+      'Scriptural &\nApostolic Continuity': 'Apollinarius worked within the canonical and apostolic framework. His error was in metaphysical reasoning about how the Incarnation works, not in rejecting any part of the received tradition.'
     }
   },
   {
     name: 'Docetism',
-    // Old: [1.5, 5.0, 5.0, 3.0, 2.5, 2.0] → avg 3.17
+    // Old: [1.5, 5.0, 5.0, 3.0, 2.5, 2.0] avg 3.17
     scores: [3, 10, 10, 6, 5, 4],
     color: '#6080d0',
     reasoning: {
-      'Trinitarian\nTheology': 'Primarily Christological. By denying the Incarnation\'s reality, it compromises the Second Person\'s true entry into creation. The motivation was typically to protect divine transcendence.',
-      'Christology': 'The furthest Christological deviation. Christ did not truly become human, was not born, did not suffer, did not die. Contradicts every Creedal clause from "was incarnate" through "was buried."',
-      'Soteriology': 'If the Incarnation is illusory, the entire soteriological economy collapses. Athanasius (<em>De Incarnatione</em> 44): death was "within the body," so Life had to be woven into it. A phantasmal Christ cannot defeat real death.',
-      'Cosmology &\nCreation': 'Presupposes a negative view of matter making divine contact impossible. Not full dualism (unlike Manichaeism), but implies material creation is unworthy of divine indwelling.',
-      'Ecclesiology &\nSacraments': 'Significantly undermines sacramental theology: if Christ\'s body is illusory, the Eucharist loses its foundation. Ignatius makes this connection in <em>To the Smyrnaeans</em>. However, Docetism did not typically generate organized counter-churches.',
-      'Scriptural &\nApostolic Continuity': 'Requires significant reinterpretation of Gospel narratives. The <em>Acts of John</em> represents a docetic revision of the Passion. However, docetists generally worked with recognizable scriptures rather than constructing alternative canons.'
+      'Trinitarian\nTheology': 'Docetism is primarily a Christological error, but it has Trinitarian implications. If the Second Person never truly entered creation, his relation to the economy of salvation is fundamentally different. The motivation was typically to protect divine transcendence: God is too exalted to genuinely become material.',
+      'Christology': 'The most extreme Christological deviation in the dataset. Christ did not truly become human, was not truly born, did not truly suffer, did not truly die. Every Creedal clause from "was incarnate" through "was buried" is contradicted. The Incarnation is an illusion, and the entire narrative of God entering history collapses.',
+      'Soteriology': 'If the Incarnation is illusory, the entire soteriological economy goes with it. A phantasmal Christ cannot defeat real death. Athanasius\'s argument in <em>De Incarnatione</em> depends on death being "within the body" so that Life could be woven into it. No real body, no real victory over death.',
+      'Cosmology &\nCreation': 'Docetism presupposes that matter is beneath divine contact. Not full-blown dualism like Manichaeism, but a deep suspicion that the material creation is unworthy of divine indwelling. That\'s in real tension with "and God saw that it was good," even if it doesn\'t rise to the level of positing a rival creator.',
+      'Ecclesiology &\nSacraments': 'If Christ\'s body is an illusion, the Eucharist as the body and blood of Christ becomes incoherent. Ignatius of Antioch makes exactly this connection in his letters. Docetism as a tendency didn\'t typically generate organized counter-churches, though. It was more of a Christological assumption that surfaced across different movements.',
+      'Scriptural &\nApostolic Continuity': 'Docetism requires substantial reinterpretation of the Gospel narratives. The birth, suffering, death, burial, and bodily resurrection all have to be explained away or reread as symbolic. Texts like the <em>Acts of John</em> show what a docetic revision of the Passion looks like. But docetists generally worked with recognizable Christian scriptures rather than constructing alternative canons, so the break is hermeneutical rather than canonical.'
     }
   }
 ];
-
-// Weight presets and state
 const WEIGHT_PRESETS = {
   equal:     [1, 1, 1, 1, 1, 1],
   conciliar: [2, 2, 1.5, 1, 1, 1]
