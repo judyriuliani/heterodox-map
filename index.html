@@ -595,7 +595,7 @@
   footer {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem 2rem 2rem 4.5rem;
+    padding: 2rem;
     border-top: 1px solid var(--border);
   }
 
@@ -617,30 +617,72 @@
     margin-bottom: 0.75rem;
   }
 
+  .methodology-body {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem 1rem 1rem 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .methodology-body p:last-child {
+    margin-bottom: 0;
+  }
+
   footer em {
     color: var(--cream-dim);
     font-style: italic;
   }
 
   .scale-legend {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-    padding: 1rem;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1rem auto 0;
+    padding: 0.4rem 0.6rem;
     background: var(--parchment-light);
     border-radius: 4px;
     border: 1px solid var(--border);
+    font-family: 'Alegreya Sans', sans-serif;
+    width: fit-content;
+  }
+
+  .ranking-section {
+    text-align: center;
+  }
+
+  .ranking-section #rankingBars {
+    text-align: left;
+  }
+
+  .scale-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    line-height: 1.5;
+  }
+
+  .scale-num {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--gold-dim);
+    min-width: 1.2rem;
+    text-align: right;
+  }
+
+  .scale-desc {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
   }
 
   @media (max-width: 600px) {
     footer {
-      padding: 1.5rem 1rem 1.5rem 2rem;
+      padding: 1.5rem 1rem;
     }
 
     .scale-legend {
-      gap: 0.75rem 1.25rem;
-      padding: 0.75rem;
+      gap: 0.2rem 0.75rem;
+      padding: 0.5rem;
     }
   }
 
@@ -804,6 +846,10 @@
       padding-left: 1rem;
       padding-right: 0.75rem;
     }
+
+    .methodology-body {
+      padding-left: 1rem;
+    }
   }
 </style>
 </head>
@@ -851,6 +897,14 @@
       <h2>Composite Heterodoxy</h2>
       <p style="font-family:'Alegreya Sans',sans-serif;font-size:0.68rem;color:var(--text-dim);line-height:1.5;letter-spacing:0.02em;font-style:italic;margin:0 0 0.75rem 0;">Composite scores reflect current axis weighting. Radar chart shows unweighted scores.</p>
       <div id="rankingBars"></div>
+      <div class="scale-legend">
+        <div class="scale-item"><span class="scale-num">10</span><span class="scale-desc">Anathema</span></div>
+        <div class="scale-item"><span class="scale-num">8</span><span class="scale-desc">Fundamental rejection</span></div>
+        <div class="scale-item"><span class="scale-num">6</span><span class="scale-desc">Contradicts defined dogma</span></div>
+        <div class="scale-item"><span class="scale-num">4</span><span class="scale-desc">Materially problematic</span></div>
+        <div class="scale-item"><span class="scale-num">2</span><span class="scale-desc">Pre-conciliar imprecision</span></div>
+        <div class="scale-item"><span class="scale-num">0</span><span class="scale-desc">Fully orthodox</span></div>
+      </div>
     </div>
   </aside>
 
@@ -884,6 +938,7 @@
 
 <footer>
   <h2>Methodology</h2>
+  <div class="methodology-body">
   <p>
     Each heresy is scored on six axes measuring how far it departs from the orthodox consensus defined by the early ecumenical councils, on a scale from 0 (orthodox) to 10 (anathema).
   </p>
@@ -893,13 +948,6 @@
   <p>
     Scores are grounded in primary sources (conciliar documents, patristic polemics, surviving heretical texts) and cross-referenced with secondary scholarship. The key distinction between adjacent scores is one of <em>degree and consequence</em>: a 6 means a heresy contradicts a defined teaching but preserves the surrounding framework, while an 8 means the rejection destabilizes other doctrines. A 2 reflects terminological imprecision that the councils later clarified, while a 4 indicates a real distortion that falls short of outright contradiction. The composite score can be calculated under three weighting modes, selectable in the sidebar. <em>Equal</em> weights all six axes at 1×. <em>Conciliar</em> weights Trinitarian Theology and Christology at 2× and Soteriology at 1.5×, reflecting the priority the ecumenical councils gave to these questions. <em>Custom</em> lets the user assign their own weights from 0.5× to 3× per axis.
   </p>
-  <div class="scale-legend">
-    <div class="scale-item"><span class="scale-num">0</span><span class="scale-desc">Fully orthodox</span></div>
-    <div class="scale-item"><span class="scale-num">2</span><span class="scale-desc">Pre-conciliar imprecision</span></div>
-    <div class="scale-item"><span class="scale-num">4</span><span class="scale-desc">Materially problematic</span></div>
-    <div class="scale-item"><span class="scale-num">6</span><span class="scale-desc">Contradicts defined dogma</span></div>
-    <div class="scale-item"><span class="scale-num">8</span><span class="scale-desc">Fundamental rejection</span></div>
-    <div class="scale-item"><span class="scale-num">10</span><span class="scale-desc">Anathema</span></div>
   </div>
 </footer>
 
